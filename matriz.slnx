@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="01 - matrizInversa/01 - matrizInversa.csproj" />
   <Project Path="02 - copiaMatrizInversa/02 - copiaMatrizInversa.csproj" />
+  <Project Path="03-somaValoresMatriz/03-somaValoresMatriz.csproj" Id="33d78d2d-a1d0-406e-8ad5-f265c5d5dbf3" />
   <Project Path="matriz/matriz.csproj" />
 </Solution>
