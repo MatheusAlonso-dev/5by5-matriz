@@ -3,5 +3,6 @@
   <Project Path="02 - copiaMatrizInversa/02 - copiaMatrizInversa.csproj" />
   <Project Path="03-somaValoresMatriz/03-somaValoresMatriz.csproj" Id="33d78d2d-a1d0-406e-8ad5-f265c5d5dbf3" />
   <Project Path="04-boletimEscolar/04-boletimEscolar.csproj" Id="d1a206ed-bf5d-4ef5-bfdd-0fa29ef427d6" />
+  <Project Path="05-batalhaNaval/05-batalhaNaval.csproj" Id="2daf0c92-9a7c-4dbe-b9ef-d305371ff1c8" />
   <Project Path="matriz/matriz.csproj" />
 </Solution>
