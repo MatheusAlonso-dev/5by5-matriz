@@ -3,7 +3,7 @@ int tamanhoTabuleiro = 10;
 int[,] tabuleiroPlayer = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 int[,] tabuleiroMaquina = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 char[] indiceCaracter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-string spanJogadaAnterior = "span inicializado";
+string spanJogadaAnterior = "";
 bool jogoFinalizado = false;
 
 int pontosPlayer = 0;
@@ -114,10 +114,10 @@ void popularTabuleiros(int[,] tabuleiro)
 void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
 {
     
-    Console.WriteLine("\nSEU TABULEIRO\t\t\tTABULEIRO MAQUINA\n\n");
+    Console.WriteLine("\n\t\t\t\tBATALHA NAVAL\n\n\t      SEU TABULEIRO\t\t    TABULEIRO MAQUINA\n");
 
     //imprime indice coluna 2 tabelas
-    Console.Write("   ");
+    Console.Write("\t   ");
     for (int i = 0; i < tamanhoTabuleiro; i++)
     {
         Console.Write($"{i} ");
@@ -132,7 +132,7 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
     //imprimir valores tabelas
     for (int i = 0; i < tamanhoTabuleiro; i++)
     {
-        Console.Write($"{indiceCaracter[i]}  ");
+        Console.Write($"\t{indiceCaracter[i]}  ");
 
         for (int j = 0; j < tamanhoTabuleiro; j++)
         {
@@ -285,7 +285,6 @@ int identificaChar(char c)
 
 popularTabuleiros(tabuleiroPlayer);
 popularTabuleiros(tabuleiroMaquina);
-alterarSpanJogadaAnterior(tabuleiroMaquina, 1, 2);
 
 while (!jogoFinalizado)
 {
@@ -296,21 +295,42 @@ while (!jogoFinalizado)
 
     if (jogadorDaVez == 1)
     {
-        char linhaChar;
-        int linha;
-        int coluna;
+        char linhaChar='@';
+        int linha=0;
+        int coluna = 0; ;
+        bool casaValida = true;
 
         while (true)
         {
-            Console.Write("\nDigite a linha (character): ");
+            Console.Clear();
+            imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
+            Console.WriteLine($"\n\t{spanJogadaAnterior}");
+
+            if (!casaValida)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"\n\tcasa inválida! [{linhaChar},{coluna}]. Digite novamente.");
+                Console.ResetColor();
+
+            }
+            else
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("\n\tSua vez!");
+                Console.ResetColor();
+            }
+
+            Console.Write("\n\tDigite a linha (char): ");
             linhaChar = char.Parse(Console.ReadLine());
             linha = identificaChar(linhaChar);
 
-            Console.Write("\nDigite a coluna (int): ");
+            Console.Write("\n\tDigite a coluna (int): ");
             coluna = int.Parse(Console.ReadLine());
 
             if (linha >= 0 && linha <= 9 && coluna >= 0 && coluna <= 9)
                 break;
+
+            casaValida = false;
         }
 
 
@@ -327,7 +347,7 @@ while (!jogoFinalizado)
     }
     else
     {
-        Console.WriteLine("\nAguardando maquina jogar...");
+        Console.WriteLine("\n\tAguardando maquina jogar...");
         Thread.Sleep(2000);
         bool casaNova = false;
 
@@ -358,17 +378,14 @@ while (!jogoFinalizado)
 
     Console.Clear();
     imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
-    Console.WriteLine($"\n{spanJogadaAnterior}");
+    Console.WriteLine($"\n\t{spanJogadaAnterior}");
 
     if (pontosPlayer == 30 || pontosMaquina == 30)
         jogoFinalizado = true;
 
-    
-    
-
 }
 
-Console.WriteLine("--------------------------");
-Console.WriteLine($"quem ganhou foi {nomeJogadorDaVez}!!");
+Console.WriteLine("\n------------------------------------------------------------");
+Console.WriteLine($"{nomeJogadorDaVez} ganhou!!\n\n\n\n");
 
 
