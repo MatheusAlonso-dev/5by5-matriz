@@ -1,4 +1,5 @@
-﻿int tamanhoTabuleiro = 10;
+﻿Random random = new Random();
+int tamanhoTabuleiro = 10;
 int[,] tabuleiroPlayer = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 int[,] tabuleiroMaquina = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 char[] indiceCaracter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
@@ -10,7 +11,7 @@ void popularTabuleiros(int[,] tabuleiro)
     {
         for (int j = 0; j < tamanhoTabuleiro; j++)
         {
-            tabuleiro[i, j] = 1;
+            tabuleiro[i, j] = random.Next(1,5);
         }
     }
 }
@@ -40,9 +41,30 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
 
         for (int j = 0; j < tamanhoTabuleiro; j++)
         {
-            if(tabPlayer[i, j] == 1)
-                Console.Write("O ");
+            
+            switch(tabPlayer[i, j])
+            {
+                
+                case 2:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Write("@ ");
+                    break;
+                case 3:
+                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    Console.Write("x ");
+                    break;
+                case 4:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.Write("* ");
+                    break;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("O ");
+                    break;
+            }
+
         }
+        Console.ResetColor();
         Console.Write("\t\t");
 
         Console.Write($"{indiceCaracter[i]}  ");
