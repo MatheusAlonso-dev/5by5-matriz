@@ -3,13 +3,18 @@ int tamanhoTabuleiro = 10;
 int[,] tabuleiroPlayer = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 int[,] tabuleiroMaquina = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 char[] indiceCaracter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-string SpanJogadaAnterior;
+string spanJogadaAnterior = "span inicializado";
+bool jogoFinalizado = false;
+
+int pontosPlayer = 0;
+int pontosMaquina = 0;
 
 int jogadorDaVez = 1;
 string nomePlayer = "player";
 string nomeMaquina = "maquina";
 string nomeJogadorDaVez = "nome inicializdo";
 
+bool navioVisivel = true;
 
 //Console.ForegroundColor = ConsoleColor.Red;
 
@@ -144,8 +149,17 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
                     Console.Write("x ");
                     break;
                 case 4:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("* ");
+                    if (navioVisivel)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("* ");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write("O ");
+                    }
+                    
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.Blue;
@@ -172,8 +186,16 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
                     Console.Write("x ");
                     break;
                 case 4:
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.Write("* ");
+                    if (navioVisivel)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.Write("* ");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write("O ");
+                    }
                     break;
                 default:
                     Console.ForegroundColor = ConsoleColor.Blue;
@@ -199,28 +221,77 @@ bool atirarNoTabuleiro(int[,] tabuleiro, int linha, int coluna)
     return false;
 }
 
-void alterarNomeJogadorDaVez(int idJogadorDaVez)
+void atualizarNomeJogadorDaVez()
 {
-    if (idJogadorDaVez == 1)
+    if (jogadorDaVez == 1)
         nomeJogadorDaVez = nomePlayer;
-    if (idJogadorDaVez == 2)
+    if (jogadorDaVez == 2)
         nomeJogadorDaVez = nomeMaquina;
 }
 
 void alterarSpanJogadaAnterior(int[,] tabuleiro, int linha, int coluna)
 {
     if (tabuleiro[linha, coluna] == 1)
-        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e acertou na agua.";
+        spanJogadaAnterior = $"jogador {nomeJogadorDaVez} atirou em [{indiceCaracter[linha]},{coluna}] e acertou na agua.";
     if (tabuleiro[linha,coluna] == 2)
-        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e acertou no MESMO lugar de um navio.";
+        spanJogadaAnterior = $"jogador {nomeJogadorDaVez} atirou em [{indiceCaracter[linha]},{coluna}] e acertou no MESMO lugar de um navio.";
     if (tabuleiro[linha,coluna] == 3)
-        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e acertou no MESMO lugar da agua.";
+        spanJogadaAnterior = $"jogador {nomeJogadorDaVez} atirou em [{indiceCaracter[linha]},{coluna}] e acertou no MESMO lugar da agua.";
     if (tabuleiro[linha,coluna] == 4)
-        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e ACERTOU UM NAVIO!";
+        spanJogadaAnterior = $"jogador {nomeJogadorDaVez} atirou em [{indiceCaracter[linha]},{coluna}] e ACERTOU UM NAVIO!";
 }
 
-
+//---------------------------------------------------------
 
 popularTabuleiros(tabuleiroPlayer);
 popularTabuleiros(tabuleiroMaquina);
+alterarSpanJogadaAnterior(tabuleiroMaquina, 1, 2);
+
+while (!jogoFinalizado)
+{
+    atualizarNomeJogadorDaVez();
+
+    int linhaRandom = random.Next(0, 10);
+    int colunaRandom = random.Next(0, 10);
+
+    if (jogadorDaVez == 1)
+    {
+        alterarSpanJogadaAnterior(tabuleiroMaquina, linhaRandom, colunaRandom);
+        if (atirarNoTabuleiro(tabuleiroMaquina, linhaRandom, colunaRandom))
+        {
+            jogadorDaVez = 1;
+            pontosPlayer++;
+        }
+        else
+            jogadorDaVez = 2;
+
+    }
+    else
+    {
+
+        alterarSpanJogadaAnterior(tabuleiroPlayer, linhaRandom, colunaRandom);
+        if (atirarNoTabuleiro(tabuleiroPlayer, linhaRandom, colunaRandom))
+        {
+            jogadorDaVez = 2;
+            pontosMaquina++;
+        }
+        else
+            jogadorDaVez = 1;
+
+    }
+
+    imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
+    Console.WriteLine($"\n{spanJogadaAnterior}");
+
+    if (pontosPlayer == 30 || pontosMaquina == 30)
+        jogoFinalizado = true;
+
+    Thread.Sleep(2000);
+    Console.Clear();
+}
+
+Console.WriteLine("--------------------------");
+Console.WriteLine($"quem ganhou foi {nomeJogadorDaVez}!!");
+
 imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
+
