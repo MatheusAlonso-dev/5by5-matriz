@@ -14,7 +14,7 @@ string nomePlayer = "player";
 string nomeMaquina = "maquina";
 string nomeJogadorDaVez = "nome inicializdo";
 
-bool navioVisivel = true;
+bool navioVisivel = false;
 
 //Console.ForegroundColor = ConsoleColor.Red;
 
@@ -241,6 +241,46 @@ void alterarSpanJogadaAnterior(int[,] tabuleiro, int linha, int coluna)
         spanJogadaAnterior = $"jogador {nomeJogadorDaVez} atirou em [{indiceCaracter[linha]},{coluna}] e ACERTOU UM NAVIO!";
 }
 
+int identificaChar(char c)
+{
+    switch (c)
+    {
+        case 'a' or 'A':
+            return 0;
+            break;
+        case 'b' or 'B':
+            return 1;
+            break;
+        case 'c' or 'C':
+            return 2;
+            break;
+        case 'd' or 'D':
+            return 3;
+            break;
+        case 'e' or 'E':
+            return 4;
+            break;
+        case 'f' or 'F':
+            return 5;
+            break;
+        case 'g' or 'G':
+            return 6;
+            break;
+        case 'h' or 'H':
+            return 7;
+            break;
+        case 'i' or 'I':
+            return 8;
+            break;
+        case 'j' or 'J':
+            return 9;
+            break;
+        default:
+            return -1;
+            break;
+    }
+}
+
 //---------------------------------------------------------
 
 popularTabuleiros(tabuleiroPlayer);
@@ -256,8 +296,27 @@ while (!jogoFinalizado)
 
     if (jogadorDaVez == 1)
     {
-        alterarSpanJogadaAnterior(tabuleiroMaquina, linhaRandom, colunaRandom);
-        if (atirarNoTabuleiro(tabuleiroMaquina, linhaRandom, colunaRandom))
+        char linhaChar;
+        int linha;
+        int coluna;
+
+        while (true)
+        {
+            Console.Write("\nDigite a linha (character): ");
+            linhaChar = char.Parse(Console.ReadLine());
+            linha = identificaChar(linhaChar);
+
+            Console.Write("\nDigite a coluna (int): ");
+            coluna = int.Parse(Console.ReadLine());
+
+            if (linha >= 0 && linha <= 9 && coluna >= 0 && coluna <= 9)
+                break;
+        }
+
+
+
+        alterarSpanJogadaAnterior(tabuleiroMaquina, linha, coluna);
+        if (atirarNoTabuleiro(tabuleiroMaquina, linha, coluna))
         {
             jogadorDaVez = 1;
             pontosPlayer++;
@@ -268,6 +327,23 @@ while (!jogoFinalizado)
     }
     else
     {
+        Console.WriteLine("\nAguardando maquina jogar...");
+        Thread.Sleep(2000);
+        bool casaNova = false;
+
+        while (!casaNova)
+        {
+            if (tabuleiroPlayer[linhaRandom,colunaRandom] == 1 || tabuleiroPlayer[linhaRandom, colunaRandom] == 4)
+            {
+                casaNova = true;                
+            }
+            else
+            {
+                linhaRandom = random.Next(0, 10);
+                colunaRandom = random.Next(0, 10);
+            }
+
+        }
 
         alterarSpanJogadaAnterior(tabuleiroPlayer, linhaRandom, colunaRandom);
         if (atirarNoTabuleiro(tabuleiroPlayer, linhaRandom, colunaRandom))
@@ -280,18 +356,19 @@ while (!jogoFinalizado)
 
     }
 
+    Console.Clear();
     imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
     Console.WriteLine($"\n{spanJogadaAnterior}");
 
     if (pontosPlayer == 30 || pontosMaquina == 30)
         jogoFinalizado = true;
 
-    Thread.Sleep(2000);
-    Console.Clear();
+    
+    
+
 }
 
 Console.WriteLine("--------------------------");
 Console.WriteLine($"quem ganhou foi {nomeJogadorDaVez}!!");
 
-imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
 
