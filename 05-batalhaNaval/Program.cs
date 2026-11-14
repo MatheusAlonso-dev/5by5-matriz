@@ -3,6 +3,12 @@ int tamanhoTabuleiro = 10;
 int[,] tabuleiroPlayer = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 int[,] tabuleiroMaquina = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 char[] indiceCaracter = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+string SpanJogadaAnterior;
+
+int jogadorDaVez = 1;
+string nomePlayer = "player";
+string nomeMaquina = "maquina";
+string nomeJogadorDaVez = "nome inicializdo";
 
 
 //Console.ForegroundColor = ConsoleColor.Red;
@@ -179,6 +185,41 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
         Console.WriteLine();
     }
 }
+
+bool atirarNoTabuleiro(int[,] tabuleiro, int linha, int coluna)
+{
+    if (tabuleiro[linha, coluna] == 1)
+        tabuleiro[linha, coluna] = 3;
+    else if(tabuleiro[linha, coluna] == 4)
+    {
+        tabuleiro[linha, coluna] = 2;
+        return true;
+    }
+
+    return false;
+}
+
+void alterarNomeJogadorDaVez(int idJogadorDaVez)
+{
+    if (idJogadorDaVez == 1)
+        nomeJogadorDaVez = nomePlayer;
+    if (idJogadorDaVez == 2)
+        nomeJogadorDaVez = nomeMaquina;
+}
+
+void alterarSpanJogadaAnterior(int[,] tabuleiro, int linha, int coluna)
+{
+    if (tabuleiro[linha, coluna] == 1)
+        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e acertou na agua.";
+    if (tabuleiro[linha,coluna] == 2)
+        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e acertou no MESMO lugar de um navio.";
+    if (tabuleiro[linha,coluna] == 3)
+        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e acertou no MESMO lugar da agua.";
+    if (tabuleiro[linha,coluna] == 4)
+        SpanJogadaAnterior = $"jogador {nomeJogadorDaVez}atirou em [{linha},{coluna}] e ACERTOU UM NAVIO!";
+}
+
+
 
 popularTabuleiros(tabuleiroPlayer);
 popularTabuleiros(tabuleiroMaquina);
