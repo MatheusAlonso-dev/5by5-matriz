@@ -1,4 +1,11 @@
-﻿Random random = new Random();
+﻿// CONFIGURAÇÕES
+bool modoComico = false;
+bool modoDaltonico = true;
+bool navioVisivel = true;
+
+
+
+Random random = new Random();
 int tamanhoTabuleiro = 10;
 int[,] tabuleiroPlayer = new int[tamanhoTabuleiro, tamanhoTabuleiro];
 int[,] tabuleiroMaquina = new int[tamanhoTabuleiro, tamanhoTabuleiro];
@@ -14,7 +21,7 @@ string nomePlayer = "player";
 string nomeMaquina = "maquina";
 string nomeJogadorDaVez = "nome inicializdo";
 
-bool navioVisivel = true;
+
 
 //Console.ForegroundColor = ConsoleColor.Red;
 
@@ -141,28 +148,33 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
             {
                 
                 case 2:
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("@ ");
                     break;
                 case 3:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("x ");
                     break;
                 case 4:
                     if (navioVisivel)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
+                        if (!modoDaltonico)
+                            Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("* ");
                     }
                     else
                     {
-                        Console.ForegroundColor = ConsoleColor.Blue;
+                        if (!modoDaltonico)
+                            Console.ForegroundColor = ConsoleColor.Blue;
                         Console.Write("O ");
                     }
                     
                     break;
                 default:
-                    Console.ForegroundColor = ConsoleColor.Blue;
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("O ");
                     break;
             }
@@ -178,27 +190,32 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
             {
 
                 case 2:
-                    Console.ForegroundColor = ConsoleColor.Red;
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Red;
                     Console.Write("@ ");
                     break;
                 case 3:
-                    Console.ForegroundColor = ConsoleColor.Yellow;
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Yellow;
                     Console.Write("x ");
                     break;
                 case 4:
                     if (navioVisivel)
                     {
-                        Console.ForegroundColor = ConsoleColor.Green;
+                        if (!modoDaltonico)
+                            Console.ForegroundColor = ConsoleColor.Green;
                         Console.Write("* ");
                     }
                     else
                     {
-                        Console.ForegroundColor = ConsoleColor.Blue;
+                        if (!modoDaltonico)
+                            Console.ForegroundColor = ConsoleColor.Blue;
                         Console.Write("O ");
                     }
                     break;
                 default:
-                    Console.ForegroundColor = ConsoleColor.Blue;
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("O ");
                     break;
             }
@@ -308,14 +325,16 @@ while (!jogoFinalizado)
 
             if (!casaValida)
             {
-                Console.ForegroundColor = ConsoleColor.Red;
+                if (!modoDaltonico)
+                    Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine("\n\tcasa inválida! Digite novamente.");
                 Console.ResetColor();
 
             }
             else
             {
-                Console.ForegroundColor = ConsoleColor.Green;
+                if (!modoDaltonico)
+                    Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine("\n\tSua vez!");
                 Console.ResetColor();
             }
