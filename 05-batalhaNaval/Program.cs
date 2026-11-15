@@ -14,7 +14,7 @@ string nomePlayer = "player";
 string nomeMaquina = "maquina";
 string nomeJogadorDaVez = "nome inicializdo";
 
-bool navioVisivel = false;
+bool navioVisivel = true;
 
 //Console.ForegroundColor = ConsoleColor.Red;
 
@@ -309,7 +309,7 @@ while (!jogoFinalizado)
             if (!casaValida)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"\n\tcasa inválida! [{linhaChar},{coluna}]. Digite novamente.");
+                Console.WriteLine("\n\tcasa inválida! Digite novamente.");
                 Console.ResetColor();
 
             }
@@ -320,12 +320,19 @@ while (!jogoFinalizado)
                 Console.ResetColor();
             }
 
-            Console.Write("\n\tDigite a linha (char): ");
-            linhaChar = char.Parse(Console.ReadLine());
+            Console.Write("\n\tDigite a linha e coluna(ex: b1): ");
+            string casaString = Console.ReadLine();
+
+            if (casaString.Length < 2 || !char.IsLetter(casaString[0]) || !char.IsDigit(casaString[1]))
+            {
+                casaValida = false;
+                continue;
+            }
+                        
+            linhaChar = casaString[0];
             linha = identificaChar(linhaChar);
 
-            Console.Write("\n\tDigite a coluna (int): ");
-            coluna = int.Parse(Console.ReadLine());
+            coluna = int.Parse(casaString[1].ToString());
 
             if (linha >= 0 && linha <= 9 && coluna >= 0 && coluna <= 9)
                 break;
@@ -386,6 +393,6 @@ while (!jogoFinalizado)
 }
 
 Console.WriteLine("\n------------------------------------------------------------");
-Console.WriteLine($"{nomeJogadorDaVez} ganhou!!\n\n\n\n");
+Console.WriteLine($"\t{nomeJogadorDaVez} ganhou!!\n\n\n\n");
 
 
