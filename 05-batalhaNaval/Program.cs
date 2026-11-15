@@ -1,7 +1,12 @@
 ﻿// CONFIGURAÇÕES
 bool modoComico = false;
-bool modoDaltonico = true;
+bool modoDaltonico = false;
 bool navioVisivel = true;
+
+char charAgua = '.';
+char charNavioVisivel = '*';
+char charNavioDanificado = '@';
+char charTiroVago = 'x';
 
 
 
@@ -150,32 +155,32 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
                 case 2:
                     if (!modoDaltonico)
                         Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("@ ");
+                    Console.Write($"{charNavioDanificado} ");
                     break;
                 case 3:
                     if (!modoDaltonico)
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("x ");
+                    Console.Write($"{charTiroVago} ");
                     break;
                 case 4:
                     if (navioVisivel)
                     {
                         if (!modoDaltonico)
                             Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("* ");
+                        Console.Write($"{charNavioVisivel} ");
                     }
                     else
                     {
                         if (!modoDaltonico)
                             Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.Write("O ");
+                        Console.Write($"{charAgua} ");
                     }
                     
                     break;
                 default:
                     if (!modoDaltonico)
                         Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.Write("O ");
+                    Console.Write($"{charAgua} ");
                     break;
             }
 
@@ -192,31 +197,31 @@ void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
                 case 2:
                     if (!modoDaltonico)
                         Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Write("@ ");
+                    Console.Write($"{charNavioDanificado} ");
                     break;
                 case 3:
                     if (!modoDaltonico)
                         Console.ForegroundColor = ConsoleColor.Yellow;
-                    Console.Write("x ");
+                    Console.Write($"{charTiroVago} ");
                     break;
                 case 4:
                     if (navioVisivel)
                     {
                         if (!modoDaltonico)
                             Console.ForegroundColor = ConsoleColor.Green;
-                        Console.Write("* ");
+                        Console.Write($"{charNavioVisivel} ");
                     }
                     else
                     {
                         if (!modoDaltonico)
                             Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.Write("O ");
+                        Console.Write($"{charAgua} ");
                     }
                     break;
                 default:
                     if (!modoDaltonico)
                         Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.Write("O ");
+                    Console.Write($"{charAgua} ");
                     break;
             }
         }
