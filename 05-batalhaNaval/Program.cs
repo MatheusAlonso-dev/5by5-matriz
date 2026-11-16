@@ -1,14 +1,15 @@
 ﻿// CONFIGURAÇÕES
 bool modoComico = false;
-bool modoDaltonico = false;
-bool navioVisivel = true;
 
-char charAgua = '.';
+bool modoDaltonico = false;
+bool navioVisivel = false;
+
+char charAgua = 'O';
 char charNavioVisivel = '*';
 char charNavioDanificado = '@';
 char charTiroVago = 'x';
 
-
+//--------------------------
 
 Random random = new Random();
 int tamanhoTabuleiro = 10;
@@ -26,6 +27,18 @@ string nomePlayer = "player";
 string nomeMaquina = "maquina";
 string nomeJogadorDaVez = "nome inicializdo";
 
+int contTentativas = 0;
+
+if (modoComico)
+{
+    modoDaltonico = true;
+    navioVisivel = true;   
+}
+
+if (modoDaltonico)
+{
+    charAgua = '.';
+}
 
 
 //Console.ForegroundColor = ConsoleColor.Red;
@@ -126,7 +139,7 @@ void popularTabuleiros(int[,] tabuleiro)
 void imprimirTabuleiros(int[,] tabPlayer, int[,] tabMaquina)
 {
     
-    Console.WriteLine("\n\t\t\t\tBATALHA NAVAL\n\n\t      SEU TABULEIRO\t\t    TABULEIRO MAQUINA\n");
+    Console.WriteLine($"\n\t\t\t\tBATALHA NAVAL\n\n\t      SEU TABULEIRO\t\t    TABULEIRO {nomeMaquina}\n");
 
     //imprime indice coluna 2 tabelas
     Console.Write("\t   ");
@@ -303,120 +316,453 @@ int identificaChar(char c)
     }
 }
 
+void jogadaPlayer(int[,] tabuleiroMaq, int linh, int col)
+{
+    alterarSpanJogadaAnterior(tabuleiroMaq, linh, col);
+    if (atirarNoTabuleiro(tabuleiroMaq, linh, col))
+    {
+        jogadorDaVez = 1;
+        pontosPlayer++;
+    }
+    else
+        jogadorDaVez = 2;
+
+}
+
+void imprimirWarnig()
+{
+    string warning = File.ReadAllText("warning.txt");
+    for(int i = 0; i < 3; i++)
+    {
+        Console.Clear();
+        Thread.Sleep(500);
+        Console.WriteLine(warning);
+        Thread.Sleep(300);
+
+    }
+
+}
+
+void imprimirRisada()
+{
+    string frase = "Adivinha quem vai jogar de novo?";
+    Console.Write("\n\n\n\n\t");
+    for(int i = 0; i < frase.Length; i++)
+    {
+        Console.Write(frase[i]);
+        Thread.Sleep(50);
+    }
+    Console.Write("\n\t");
+    for (int i = 0; i < 30; i++)
+    {
+        Console.Write("k");
+        Thread.Sleep(50);
+    }
+    Thread.Sleep(2000);
+}
+
+void imprimirFrase1()
+{
+    string frase = "É assim então? vamos ver se vc é bom mesmo!";
+    Console.Write("\n\n\n\n\t");
+    for (int i = 0; i < frase.Length; i++)
+    {
+        Console.Write(frase[i]);
+        Thread.Sleep(50);
+    }    
+    
+    Thread.Sleep(1000);
+    frase = "Desligando modo daltonico";
+    Console.Clear();
+    Console.Write("\n\n\n\n\t");
+    for (int i = 0; i < frase.Length; i++)
+    {
+        Console.Write(frase[i]);
+        Thread.Sleep(50);
+    }
+    Console.Write("\n\n\t");
+    for (int i = 0; i < 10; i++)
+    {
+        Console.Write("k");
+        Thread.Sleep(50);
+    }
+
+    Thread.Sleep(2000);
+
+
+}
+
+void imprimirFraseFinal()
+{
+    string frase = "Que pena, você perdeu!";
+    Console.Write("\n\n\n\n\t");
+    for (int i = 0; i < frase.Length; i++)
+    {
+        Console.Write(frase[i]);
+        Thread.Sleep(50);
+    }
+
+    Thread.Sleep(1000);
+    frase = "NÃO tente novamente mais tarde!";
+    Console.Write("\n\t");
+    for (int i = 0; i < frase.Length; i++)
+    {
+        Console.Write(frase[i]);
+        Thread.Sleep(50);
+    }
+    Console.Write("\n\n\n\n\n\n");
+}
+
+void imprimirBinario(int temp)
+{
+    Console.Clear();
+    for (int i = 0; i < temp; i++)
+    {
+        Console.Write(random.Next(0, 2));
+    }
+    Console.Clear();
+}
+
 //---------------------------------------------------------
 
 popularTabuleiros(tabuleiroPlayer);
 popularTabuleiros(tabuleiroMaquina);
 
-while (!jogoFinalizado)
+if (!modoComico)
 {
-    atualizarNomeJogadorDaVez();
-
-    int linhaRandom = random.Next(0, 10);
-    int colunaRandom = random.Next(0, 10);
-
-    if (jogadorDaVez == 1)
+    // modo normal
+    while (!jogoFinalizado)
     {
-        char linhaChar='@';
-        int linha=0;
-        int coluna = 0; ;
-        bool casaValida = true;
+        atualizarNomeJogadorDaVez();
 
-        while (true)
+        int linhaRandom = random.Next(0, 10);
+        int colunaRandom = random.Next(0, 10);
+
+        if (jogadorDaVez == 1)
         {
-            Console.Clear();
-            imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
-            Console.WriteLine($"\n\t{spanJogadaAnterior}");
+            char linhaChar = '@';
+            int linha = 0;
+            int coluna = 0; ;
+            bool casaValida = true;
 
-            if (!casaValida)
+            while (true)
             {
-                if (!modoDaltonico)
-                    Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("\n\tcasa inválida! Digite novamente.");
-                Console.ResetColor();
+                Console.Clear();
+                imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
+                Console.WriteLine($"\n\t{spanJogadaAnterior}");
 
-            }
-            else
-            {
-                if (!modoDaltonico)
-                    Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("\n\tSua vez!");
-                Console.ResetColor();
-            }
+                if (!casaValida)
+                {
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n\tcasa inválida! Digite novamente.");
+                    Console.ResetColor();
 
-            Console.Write("\n\tDigite a linha e coluna(ex: b1): ");
-            string casaString = Console.ReadLine();
+                }
+                else
+                {
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\n\tSua vez!");
+                    Console.ResetColor();
+                }
 
-            if (casaString.Length < 2 || !char.IsLetter(casaString[0]) || !char.IsDigit(casaString[1]))
-            {
+                Console.Write("\n\tDigite a linha e coluna(ex: b1): ");
+                string casaString = Console.ReadLine();
+
+                if (casaString.Length < 2 || !char.IsLetter(casaString[0]) || !char.IsDigit(casaString[1]))
+                {
+                    casaValida = false;
+                    continue;
+                }
+
+                linhaChar = casaString[0];
+                linha = identificaChar(linhaChar);
+
+                coluna = int.Parse(casaString[1].ToString());
+
+                if (linha >= 0 && linha <= 9 && coluna >= 0 && coluna <= 9)
+                    break;
+
                 casaValida = false;
-                continue;
             }
-                        
-            linhaChar = casaString[0];
-            linha = identificaChar(linhaChar);
-
-            coluna = int.Parse(casaString[1].ToString());
-
-            if (linha >= 0 && linha <= 9 && coluna >= 0 && coluna <= 9)
-                break;
-
-            casaValida = false;
-        }
 
 
 
-        alterarSpanJogadaAnterior(tabuleiroMaquina, linha, coluna);
-        if (atirarNoTabuleiro(tabuleiroMaquina, linha, coluna))
-        {
-            jogadorDaVez = 1;
-            pontosPlayer++;
-        }
-        else
-            jogadorDaVez = 2;
-
-    }
-    else
-    {
-        Console.WriteLine("\n\tAguardando maquina jogar...");
-        Thread.Sleep(2000);
-        bool casaNova = false;
-
-        while (!casaNova)
-        {
-            if (tabuleiroPlayer[linhaRandom,colunaRandom] == 1 || tabuleiroPlayer[linhaRandom, colunaRandom] == 4)
+            alterarSpanJogadaAnterior(tabuleiroMaquina, linha, coluna);
+            if (atirarNoTabuleiro(tabuleiroMaquina, linha, coluna))
             {
-                casaNova = true;                
+                jogadorDaVez = 1;
+                pontosPlayer++;
             }
             else
-            {
-                linhaRandom = random.Next(0, 10);
-                colunaRandom = random.Next(0, 10);
-            }
+                jogadorDaVez = 2;
 
-        }
-
-        alterarSpanJogadaAnterior(tabuleiroPlayer, linhaRandom, colunaRandom);
-        if (atirarNoTabuleiro(tabuleiroPlayer, linhaRandom, colunaRandom))
-        {
-            jogadorDaVez = 2;
-            pontosMaquina++;
         }
         else
-            jogadorDaVez = 1;
+        {
+            Console.WriteLine("\n\tAguardando maquina jogar...");
+            Thread.Sleep(2000);
+            bool casaNova = false;
+
+            while (!casaNova)
+            {
+                if (tabuleiroPlayer[linhaRandom, colunaRandom] == 1 || tabuleiroPlayer[linhaRandom, colunaRandom] == 4)
+                {
+                    casaNova = true;
+                }
+                else
+                {
+                    linhaRandom = random.Next(0, 10);
+                    colunaRandom = random.Next(0, 10);
+                }
+
+            }
+
+            alterarSpanJogadaAnterior(tabuleiroPlayer, linhaRandom, colunaRandom);
+            if (atirarNoTabuleiro(tabuleiroPlayer, linhaRandom, colunaRandom))
+            {
+                jogadorDaVez = 2;
+                pontosMaquina++;
+            }
+            else
+                jogadorDaVez = 1;
+
+        }
+
+        Console.Clear();
+        imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
+        Console.WriteLine($"\n\t{spanJogadaAnterior}");
+
+        if (pontosPlayer == 30 || pontosMaquina == 30)
+            jogoFinalizado = true;
 
     }
+
+}
+else
+{
+    // modo comico
+    Console.Write("\n\n\n\n\t Digite seu nome de jogador: ");
+    nomePlayer = Console.ReadLine();
+
+    Console.WriteLine("\n\n\n\n\t Escolhendo seu adversario...");
+    Thread.Sleep(4000);
+    nomeMaquina = "Cyber Pestana";
+
+    Console.Clear();
+    Console.WriteLine($"\n\n\n\n\t Você vai jogar contra: {nomeMaquina}");
+    Thread.Sleep(5000);
+
+    Console.Clear();
+    Console.WriteLine($"\n\n\n\n\t (Modo daltonico ativado)");
+    Thread.Sleep(3000);
+
+
+    while (!jogoFinalizado)
+    {
+        atualizarNomeJogadorDaVez();
+
+        int linhaRandom = random.Next(0, 10);
+        int colunaRandom = random.Next(0, 10);
+
+        if (jogadorDaVez == 1)
+        {
+            char linhaChar = '@';
+            int linha = 0;
+            int coluna = 0; ;
+            bool casaValida = true;
+
+            //confere se a casa é valida
+            while (true)
+            {
+                Console.Clear();
+                imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
+                Console.WriteLine($"\n\t{spanJogadaAnterior}");
+
+                if (!casaValida)
+                {
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("\n\tcasa inválida! Digite novamente.");
+                    Console.ResetColor();
+
+                }
+                else
+                {
+                    if (!modoDaltonico)
+                        Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("\n\tSua vez!");
+                    Console.ResetColor();
+                }
+
+                Console.Write("\n\tDigite a linha e coluna(ex: b1): ");
+                string casaString = Console.ReadLine();
+
+                if (casaString.Length < 2 || !char.IsLetter(casaString[0]) || !char.IsDigit(casaString[1]))
+                {
+                    casaValida = false;
+                    continue;
+                }
+
+                linhaChar = casaString[0];
+                linha = identificaChar(linhaChar);
+
+                coluna = int.Parse(casaString[1].ToString());
+
+                if (linha >= 0 && linha <= 9 && coluna >= 0 && coluna <= 9)
+                    break;
+
+                casaValida = false;
+            }
+
+            switch (pontosPlayer)
+            {
+                case 5:
+                    jogadaPlayer(tabuleiroMaquina, linha, coluna);
+                    
+                    Console.Clear();
+                    imprimirWarnig();
+                    imprimirBinario(5000);                    
+                    Console.WriteLine($"\n\n\n\n\t {nomeMaquina} Hackeou o jogo e decidiu que é a vez dele de jogar...");
+                    Thread.Sleep(5000);
+                    jogadorDaVez = 2;
+                    break;
+                case 10:
+                    jogadaPlayer(tabuleiroMaquina, linha, coluna);
+                    imprimirBinario(5000);
+
+                    Console.WriteLine($"\n\n\n\n\t {nomeMaquina} decidiu que é a vez dele de novo...");
+                    Thread.Sleep(4000);
+                    jogadorDaVez = 2;
+
+                    break;
+
+                case 20:
+                    jogadaPlayer(tabuleiroMaquina, linha, coluna);
+                    imprimirBinario(5000);
+                   
+                    Console.WriteLine($"\n\n\n\n\tele de novo...");
+                    Thread.Sleep(5000);
+                    jogadorDaVez = 2;
+
+                    break;
+
+                case 22:
+                    jogadaPlayer(tabuleiroMaquina, linha, coluna);
+                    imprimirBinario(40000);                    
+                    imprimirRisada();
+                    jogadorDaVez = 2;
+
+                    break;
+
+                case 25:
+                    jogadaPlayer(tabuleiroMaquina, linha, coluna);
+                    imprimirBinario(40000);                    
+                    imprimirFrase1();
+                    jogadorDaVez = 2;
+                    modoDaltonico = false;
+                    charAgua = 'O';
+                    charNavioDanificado = 'O';
+                    charNavioVisivel = 'O';
+                    charTiroVago = 'O';
+                    break;
+                                    
+                case 29:
+                    contTentativas++;
+
+                    if (contTentativas > 2)
+                    {
+                        imprimirBinario(40000);                        
+                        jogadorDaVez = 2;
+
+                        charAgua = '.';
+                        charNavioDanificado = '@';
+                        charNavioVisivel = '*';
+                        charTiroVago = 'x';
+                    }
+
+                    break;
+                default:
+                    jogadaPlayer(tabuleiroMaquina, linha, coluna);
+                    break;
+
+            }
+
+            
+
+        }
+        else
+        {
+            // jogador 2
+            Console.WriteLine($"\n\n\n\n\tAguardando {nomeJogadorDaVez} jogar...");
+            if(contTentativas < 2)
+                Thread.Sleep(2000);
+            else
+                Thread.Sleep(250);
+            bool casaNova = false;
+
+            while (!casaNova)
+            {
+                if (tabuleiroPlayer[linhaRandom, colunaRandom] == 1 || tabuleiroPlayer[linhaRandom, colunaRandom] == 4)
+                {
+                    casaNova = true;
+                }
+                else
+                {
+                    linhaRandom = random.Next(0, 10);
+                    colunaRandom = random.Next(0, 10);
+                }
+
+                if(contTentativas > 2)
+                {
+                    casaNova = false;
+                    if (tabuleiroPlayer[linhaRandom, colunaRandom] == 4)
+                    {
+                        casaNova = true;
+                    }
+                    else
+                    {
+                        linhaRandom = random.Next(0, 10);
+                        colunaRandom = random.Next(0, 10);
+                    }
+
+                }
+
+            }
+
+            alterarSpanJogadaAnterior(tabuleiroPlayer, linhaRandom, colunaRandom);
+            if (atirarNoTabuleiro(tabuleiroPlayer, linhaRandom, colunaRandom))
+            {
+                jogadorDaVez = 2;
+                pontosMaquina++;
+            }
+            else
+                jogadorDaVez = 1;
+
+        }
+
+        Console.Clear();
+        imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
+        Console.WriteLine($"\n\t{spanJogadaAnterior}");
+
+        if (pontosPlayer == 30 || pontosMaquina == 30)
+            jogoFinalizado = true;
+
+    }
+}
+
+Console.WriteLine("\n------------------------------------------------------------");
+if(contTentativas == 0)
+{
+Console.WriteLine($"\n\t{nomeJogadorDaVez} ganhou!!\n\n\n\n");
+}
+else
+{
 
     Console.Clear();
     imprimirTabuleiros(tabuleiroPlayer, tabuleiroMaquina);
     Console.WriteLine($"\n\t{spanJogadaAnterior}");
 
-    if (pontosPlayer == 30 || pontosMaquina == 30)
-        jogoFinalizado = true;
-
+    imprimirFraseFinal();
 }
-
-Console.WriteLine("\n------------------------------------------------------------");
-Console.WriteLine($"\t{nomeJogadorDaVez} ganhou!!\n\n\n\n");
-
-
